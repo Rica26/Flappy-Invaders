@@ -23,6 +23,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let labelPlayer = SKLabelNode()
     let labelMonsters = SKLabelNode()
     
+    let upButton = SKSpriteNode(imageNamed: "arrow_up")
+    let downButton = SKSpriteNode(imageNamed: "arrow_down")
+    
     override func didMove(to view: SKView) {
         backgroundColor = .lightGray
         player.position = CGPoint(x: size.width * 0.05,
@@ -65,6 +68,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let bgMusic = SKAudioNode(fileNamed: "background-music-aac.caf")
         bgMusic.autoplayLooped = true
         addChild(bgMusic)
+        
+        // Configura o botão de cima
+            upButton.name = "upButton"
+            upButton.size = CGSize(width: 50, height: 50)
+            upButton.position = CGPoint(x: 60, y: 100)
+            addChild(upButton)
+            
+            // Configura o botão de baixo
+            downButton.name = "downButton"
+            downButton.size = CGSize(width: 50, height: 50)
+            downButton.position = CGPoint(x: 60, y: 40)
+            addChild(downButton)
     }
     
     func addMonster() {
@@ -88,6 +103,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
     }
     
+    /*
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
         let touchLocation = touch.location(in: self)
@@ -107,15 +123,59 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if offset.x < 0 { return }
         addChild(projectile)
         
-        let direction = offset.normalized()
-        let amount = direction * 1000 // fora do ecra
+        //let direction = offset.normalized()
+        let direction = CGVector(dx: cos(player.zRotation), dy: sin(player.zRotation))
+        let amount = direction * CGVector(dx:1000, dy:1000) // fora do ecra
         let finalDestination = amount + projectile.position
         let move = SKAction.move(to: finalDestination, duration: 2)
+        
+        
+        // Calcula o vetor de direção com base na rotação do jogador
+        
+        // Aplica impulso ao projétil
+        let speed: CGFloat = 500
+        let impulse = CGVector(dx: direction.dx * speed, dy: direction.dy * speed)
+        projectile.physicsBody?.applyImpulse(impulse)
         let moveDone = SKAction.removeFromParent()
         projectile.run(SKAction.sequence([move, moveDone]))
         
         run(SKAction.playSoundFileNamed("pew-pew-lei.caf", waitForCompletion: false))
     }
+    */
+    
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let _ = touches.first else { return }
+
+        let projectile = SKSpriteNode(imageNamed: "projectile")
+        projectile.position = player.position
+        projectile.size = CGSize(width: 50, height: 50)
+
+        // Define física do projétil
+        projectile.physicsBody = SKPhysicsBody(circleOfRadius: projectile.size.width / 2)
+        projectile.physicsBody?.isDynamic = true
+        projectile.physicsBody?.categoryBitMask = Categoria.projectile
+        projectile.physicsBody?.contactTestBitMask = Categoria.monster
+        projectile.physicsBody?.collisionBitMask = Categoria.none
+        projectile.physicsBody?.usesPreciseCollisionDetection = true
+
+        addChild(projectile)
+
+        // Direção baseada na rotação do jogador
+        let direction = CGVector(dx: cos(player.zRotation), dy: sin(player.zRotation))
+
+        // Aplica impulso ao projétil
+        let speed: CGFloat = 500
+        let impulse = CGVector(dx: direction.dx * speed, dy: direction.dy * speed)
+        projectile.physicsBody?.applyImpulse(impulse)
+
+        // Remove o projétil após 2 segundos
+        let remove = SKAction.sequence([SKAction.wait(forDuration: 2), SKAction.removeFromParent()])
+        projectile.run(remove)
+
+        // Som do disparo
+        run(SKAction.playSoundFileNamed("pew-pew-lei.caf", waitForCompletion: false))
+    }
+
 
     func didBegin(_ contact: SKPhysicsContact) {
         var firstBody : SKPhysicsBody
@@ -137,7 +197,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 
                 killed += 1
                 labelMonsters.text = "Killed: \(killed)"
-                if killed > 5 {
+                if killed > 499 {
                     changeScene(won: true)
                 }
             }
@@ -156,5 +216,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let reveal = SKTransition.flipVertical(withDuration: 0.5)
         let gameoverScene = GameOverScene(size: self.size, won: won)
         self.view?.presentScene(gameoverScene, transition: reveal)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        guard let touch = touches.first else { return }
+        let location = touch.location(in: self)
+        let nodesAtPoint = nodes(at: location)
+
+        for node in nodesAtPoint {
+            if node.name == "upButton" {
+                movePlayer(up: true)
+            } else if node.name == "downButton" {
+                movePlayer(up: false)
+            }
+        }
+    }
+
+    func movePlayer(up: Bool) {
+        let moveDistance: CGFloat = 50.0
+        let newY = player.position.y + (up ? moveDistance : -moveDistance)
+        let clampedY = min(max(newY, player.size.height / 2), size.height - player.size.height / 2)
+        player.position = CGPoint(x: player.position.x, y: clampedY)
     }
 }
