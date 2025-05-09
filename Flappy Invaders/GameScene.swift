@@ -23,11 +23,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let labelPlayer = SKLabelNode()
     let labelMonsters = SKLabelNode()
     
-    let upButton = SKSpriteNode(imageNamed: "arrow_up")
-    let downButton = SKSpriteNode(imageNamed: "arrow_down")
+    let upButton = SKSpriteNode(imageNamed: "arrow")
+    let downButton = SKSpriteNode(imageNamed: "arrow")
     
     override func didMove(to view: SKView) {
-        backgroundColor = .lightGray
+        let background = SKSpriteNode(imageNamed: "background")
+            background.position = CGPoint(x: size.width / 2, y: size.height / 2)
+            background.size = self.size
+            background.zPosition = -1
+            addChild(background)
+        
         player.position = CGPoint(x: size.width * 0.05,
                                   y: size.height * 0.5)
         player.size = CGSize(width: 50, height: 50)
@@ -70,16 +75,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(bgMusic)
         
         // Configura o botão de cima
-            upButton.name = "upButton"
-            upButton.size = CGSize(width: 50, height: 50)
-            upButton.position = CGPoint(x: 60, y: 100)
-            addChild(upButton)
+        upButton.name = "upButton"
+        upButton.size = CGSize(width: 70, height: 70)
+        upButton.position = CGPoint(x: size.width - 60, y: 100)
+        addChild(upButton)
             
-            // Configura o botão de baixo
-            downButton.name = "downButton"
-            downButton.size = CGSize(width: 50, height: 50)
-            downButton.position = CGPoint(x: 60, y: 40)
-            addChild(downButton)
+        // Configura o botão de baixo
+        downButton.name = "downButton"
+        downButton.size = CGSize(width: 70, height: 70)
+        downButton.position = CGPoint(x: size.width - 60, y: 40)
+        downButton.zRotation = .pi
+        addChild(downButton)
     }
     
     func addMonster() {
