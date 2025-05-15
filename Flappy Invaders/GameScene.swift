@@ -201,7 +201,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         projectile.position = player.position
         projectile.size = CGSize(width: 50, height: 50)
 
-        // Define física do projétil
         projectile.physicsBody = SKPhysicsBody(circleOfRadius: projectile.size.width / 2)
         projectile.physicsBody?.isDynamic = true
         projectile.physicsBody?.categoryBitMask = Categoria.projectile
