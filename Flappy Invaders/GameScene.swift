@@ -18,11 +18,11 @@ struct Categoria {
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
     let player = SKSpriteNode(imageNamed: "player")
-    var lives = 3
+    var lives = 10
     var killed = 0
     let labelPlayer = SKLabelNode()
     let labelMonsters = SKLabelNode()
-    var ammo = 5
+    var ammo = 500
     let labelAmmo = SKLabelNode()
     
     let upButton = SKSpriteNode(imageNamed: "arrow")
@@ -35,6 +35,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             background.size = self.size
             background.zPosition = -1
             addChild(background)
+        
         
         player.position = CGPoint(x: size.width * 0.05,
                                   y: size.height * 0.5)
@@ -73,7 +74,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.repeatForever(
             SKAction.sequence([
                 SKAction.run(addMonster),
-                SKAction.wait(forDuration: 1)
+                SKAction.wait(forDuration: 2)
             ]
                              )))
         
@@ -101,12 +102,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(shootButton)
     }
     
+    /*
     func addMonster() {
         let monster = SKSpriteNode(imageNamed: "monster")
         let randomY = CGFloat.random(in: 0 ..< size.height)
 
         monster.position = CGPoint(x: size.width - 80, y: randomY)
         monster.size = CGSize(width: 50, height: 50)
+        
         
         monster.physicsBody = SKPhysicsBody(rectangleOf: monster.size)
         monster.physicsBody?.isDynamic = false
@@ -115,15 +118,58 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         monster.physicsBody?.collisionBitMask = Categoria.none
         monster.physicsBody?.usesPreciseCollisionDetection = true
         
+         
         addChild(monster)
         
-        let duration = CGFloat.random(in: 2 ..< 4)
+        var i : CGFloat
+        var j : CGFloat
+        i = 10
+        j = 10
+        
+        switch killed {
+        case 0 ..< 30:
+            i = 10
+            j = 10
+        case 30 ..< 60:
+            i = 8
+        case 60 ..< 90:
+            i = 6
+        case 90 ..< 120:
+            i = 4
+            j = 7
+        default:
+            i = 2
+        }
+        
+        let duration = CGFloat.random(in: i ... j)
         let move = SKAction.move(to: CGPoint(x: -monster.size.width, y: randomY), duration: duration)
         monster.run(SKAction.sequence([move, SKAction.removeFromParent()] ))
-        
     }
+     */
     
-    
+    func addMonster() {
+        var monster : Monster
+        var i : CGFloat
+        switch killed {
+        case 0 ..< 5:
+            i = 20
+        case 5 ..< 10:
+            i = 40
+        default:
+            i = 60
+        }
+        
+        var j = CGFloat.random(in: 0 ..< 100)
+        
+        if j <= i {
+            monster = FastMonster(sceneSize: self.size, killed: self.killed)
+        }else {
+            monster = Monster(sceneSize: self.size, killed: self.killed)
+        }
+        
+        addChild(monster)
+    }
+
 
 
     func didBegin(_ contact: SKPhysicsContact) {
@@ -147,16 +193,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 killed += 1
                 labelMonsters.text = "Killed: \(killed)"
                 if killed > 499 {
+                    //player.removeFromParent()
                     changeScene(won: true)
                 }
             }
         }
         else if firstBody.categoryBitMask == Categoria.monster &&
                     secondBody.categoryBitMask == Categoria.player {
-            lives -= 1
-            labelPlayer.text = "Lives: \(lives)"
-            if lives <= 0 {
-                changeScene(won: false)
+            if let monster = firstBody.node as? SKSpriteNode{
+                monster.removeFromParent()
+                
+                lives -= 1
+                labelPlayer.text = "Lives: \(lives)"
+                
+                if lives <= 0 {
+                    //player.removeFromParent()
+                    changeScene(won: false)
+                }
             }
         }
     }
@@ -226,6 +279,27 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.playSoundFileNamed("pew-pew-lei.caf", waitForCompletion: false))
         ammo-=1
         labelAmmo.text = "Ammo: \(ammo)"
+    }
+    
+    override func update(_ currentTime: TimeInterval) {
+        // Verifica todos os monstros na cena
+        for node in self.children {
+            if let monster = node as? SKSpriteNode,
+               monster.physicsBody?.categoryBitMask == Categoria.monster {
+                
+                // Se o monstro chegou ao lado esquerdo da tela (x <= 0)
+                if monster.position.x <= 0 {
+                    monster.removeFromParent()  // Remove o monstro da cena
+                    
+                    lives -= 1
+                    labelPlayer.text = "Lives: \(lives)"
+                    
+                    if lives <= 0 {
+                        changeScene(won: false)
+                    }
+                }
+            }
+        }
     }
     
     
