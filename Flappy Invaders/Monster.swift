@@ -9,10 +9,12 @@ import Foundation
 import SpriteKit
 
 class Monster: SKSpriteNode {
+    var originalSpeed : TimeInterval = 1.0
     
     init(sceneSize: CGSize, killed: Int) {
         let texture = SKTexture(imageNamed: "monster")
         let size = CGSize(width: 50, height: 50)
+        
         super.init(texture: texture, color: .clear, size: size)
 
         let randomY = CGFloat.random(in: 0 ..< sceneSize.height)
@@ -39,6 +41,7 @@ class Monster: SKSpriteNode {
         }
 
         let duration = CGFloat.random(in: i ... j)
+        originalSpeed = TimeInterval(duration)
         let move = SKAction.move(to: CGPoint(x: -self.size.width, y: self.position.y), duration: TimeInterval(duration))
         self.run(SKAction.sequence([move, SKAction.removeFromParent()]))
     }
@@ -55,6 +58,16 @@ class Monster: SKSpriteNode {
         self.physicsBody?.collisionBitMask = Categoria.none
         self.physicsBody?.usesPreciseCollisionDetection = true
     }
+    
+    func slowDown() {
+            self.removeAction(forKey: "move")
+            
+            // Nova velocidade: 2x mais lento (podes ajustar como quiseres)
+        let slowedDuration = originalSpeed * 2
+
+            let move = SKAction.move(to: CGPoint(x: -self.size.width, y: self.position.y), duration: slowedDuration)
+            self.run(SKAction.sequence([move, SKAction.removeFromParent()]), withKey: "move")
+        }
 }
 
 class FastMonster : Monster {

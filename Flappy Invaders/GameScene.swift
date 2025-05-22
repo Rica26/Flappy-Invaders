@@ -14,6 +14,7 @@ struct Categoria {
     static let monster : UInt32 = 0b1  // 1
     static let projectile : UInt32 = 0b10 // 2
     static let player : UInt32 = 0b11 // 3
+    static let powerUp: UInt32 = 0x1 << 3
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
@@ -168,6 +169,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         addChild(monster)
+        
+        /*
+        if Int.random(in: 0...100) < 100 { // 5% de probabilidade
+            let powerUp = PowerUp(sceneSize: self.size)
+            self.addChild(powerUp)
+        }
+         */
+        
+        if Int.random(in: 0...100) < 60 { // 5% de probabilidade
+            let ammoBox = AmmoBox(sceneSize: self.size)
+            self.addChild(ammoBox)
+        }
+        
+        if Int.random(in: 0...100) < 40 {
+            let slow = Slow(sceneSize: self.size)
+            self.addChild(slow)
+        }
     }
 
 
@@ -211,6 +229,29 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                     changeScene(won: false)
                 }
             }
+        }
+        
+        if (firstBody.categoryBitMask == Categoria.player && secondBody.categoryBitMask == Categoria.powerUp) ||
+            (firstBody.categoryBitMask == Categoria.powerUp && secondBody.categoryBitMask == Categoria.player) {
+            
+            guard let powerUpNode = (firstBody.categoryBitMask == Categoria.powerUp ? firstBody.node : secondBody.node) as? PowerUp else {
+                return
+            }
+
+            // Verifica o tipo de power-up
+            if let ammoBox = powerUpNode as? AmmoBox {
+                ammo += 10
+                labelAmmo.text = "Ammo: \(ammo)"
+            }
+            
+            if let slow = powerUpNode as? Slow {
+                slowDownMonsters()
+            }
+
+            // Adiciona aqui outros tipos no futuro, ex: if powerUpNode is HealthPowerUp { ... }
+
+            // Remover o power-up da cena no fim
+            powerUpNode.removeFromParent()
         }
     }
     
@@ -302,5 +343,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    
+    func slowDownMonsters() {
+        for node in self.children {
+            if let monster = node as? Monster {
+                monster.slowDown()
+            }
+        }
+    }
 }

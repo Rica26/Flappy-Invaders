@@ -17,6 +17,7 @@
 		68B30A552DCDF9A600F6CC2A /* GameOverScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B30A542DCDF9A600F6CC2A /* GameOverScene.swift */; };
 		68B30A572DCDF9DB00F6CC2A /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B30A562DCDF9DB00F6CC2A /* GameViewController.swift */; };
 		68B30A592DCDFA4900F6CC2A /* CGPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B30A582DCDFA4900F6CC2A /* CGPointExtensions.swift */; };
+		68BA19E12DDF1B46001F472B /* PowerUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BA19E02DDF1B46001F472B /* PowerUp.swift */; };
 		68C180962DD736B200C8A1EF /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C180952DD736B200C8A1EF /* Monster.swift */; };
 /* End PBXBuildFile section */
 
@@ -32,6 +33,7 @@
 		68B30A542DCDF9A600F6CC2A /* GameOverScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverScene.swift; sourceTree = "<group>"; };
 		68B30A562DCDF9DB00F6CC2A /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		68B30A582DCDFA4900F6CC2A /* CGPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtensions.swift; sourceTree = "<group>"; };
+		68BA19E02DDF1B46001F472B /* PowerUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUp.swift; sourceTree = "<group>"; };
 		68C180952DD736B200C8A1EF /* Monster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -76,6 +78,7 @@
 				68B30A562DCDF9DB00F6CC2A /* GameViewController.swift */,
 				68B30A582DCDFA4900F6CC2A /* CGPointExtensions.swift */,
 				68C180952DD736B200C8A1EF /* Monster.swift */,
+				68BA19E02DDF1B46001F472B /* PowerUp.swift */,
 			);
 			path = "Flappy Invaders";
 			sourceTree = "<group>";
@@ -154,6 +157,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				68B30A572DCDF9DB00F6CC2A /* GameViewController.swift in Sources */,
+				68BA19E12DDF1B46001F472B /* PowerUp.swift in Sources */,
 				68B30A532DCDF97600F6CC2A /* GameScene.swift in Sources */,
 				68B30A592DCDFA4900F6CC2A /* CGPointExtensions.swift in Sources */,
 				68B30A552DCDF9A600F6CC2A /* GameOverScene.swift in Sources */,
