@@ -25,7 +25,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let labelMonsters = SKLabelNode()
     var ammo = 500
     let labelAmmo = SKLabelNode()
-    
+    var lastUpdateTime: TimeInterval = 0
+
     let upButton = SKSpriteNode(imageNamed: "arrow")
     let downButton = SKSpriteNode(imageNamed: "arrow")
     let shootButton = SKSpriteNode(imageNamed: "shootButton")
@@ -72,12 +73,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.gravity = .zero
         physicsWorld.contactDelegate = self
         
-        run(SKAction.repeatForever(
-            SKAction.sequence([
-                SKAction.run(addMonster),
-                SKAction.wait(forDuration: 2)
-            ]
-                             )))
+        
+        
+        removeAction(forKey: "monsterSpawn")
+        startMonsterSpawn()
+
         
         
         let bgMusic = SKAudioNode(fileNamed: "background-music-aac.caf")
@@ -103,6 +103,22 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         addChild(shootButton)
     }
     
+    func startMonsterSpawn() {
+        let baseInterval: Double = 2.0
+        let spawnRateIncrease: Double = 0.03 // quanto mais kills, mais rápido
+        let minInterval: Double = 0.3        // nunca menos que isso
+
+        let adjustedInterval = max(baseInterval - (Double(killed) * spawnRateIncrease), minInterval)
+
+        let spawnAction = SKAction.sequence([
+            SKAction.run(addMonster),
+            SKAction.wait(forDuration: adjustedInterval)
+        ])
+
+        let repeatAction = SKAction.repeatForever(spawnAction)
+        run(repeatAction, withKey: "monsterSpawn")
+    }
+
     /*
     func addMonster() {
         let monster = SKSpriteNode(imageNamed: "monster")
@@ -149,26 +165,34 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
      */
     
     func addMonster() {
-        var monster : Monster
-        var i : CGFloat
-        switch killed {
-        case 0 ..< 5:
-            i = 20
-        case 5 ..< 10:
-            i = 40
-        default:
-            i = 60
-        }
-        
-        var j = CGFloat.random(in: 0 ..< 100)
-        
-        if j <= i {
-            monster = FastMonster(sceneSize: self.size, killed: self.killed)
-        }else {
-            monster = Monster(sceneSize: self.size, killed: self.killed)
-        }
-        
-        addChild(monster)
+        var monster: Monster
+            var fastChance: CGFloat
+            var largeChance: CGFloat
+
+            // Define as chances de acordo com o número de inimigos mortos
+            switch killed {
+            case 0..<5:
+                fastChance = 0   // 0%
+                largeChance = 0 // 0%
+            case 5..<10:
+                fastChance = 20  // 20%
+                largeChance = 5  // 5%
+            default:
+                fastChance = 40  // 40%
+                largeChance = 10 // 10%
+            }
+
+            let rand = CGFloat.random(in: 0..<100)
+
+            if rand < largeChance {
+                monster = LargeMonster(sceneSize: self.size, killed: self.killed)
+            } else if rand < largeChance + fastChance {
+                monster = FastMonster(sceneSize: self.size, killed: self.killed)
+            } else {
+                monster = Monster(sceneSize: self.size, killed: self.killed)
+            }
+
+            addChild(monster)
         
         /*
         if Int.random(in: 0...100) < 100 { // 5% de probabilidade
@@ -203,33 +227,41 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         if firstBody.categoryBitMask == Categoria.monster &&
             secondBody.categoryBitMask == Categoria.projectile {
-            if let monster = firstBody.node as? SKSpriteNode,
+            if let monster = firstBody.node as? Monster,
                let projectile = secondBody.node as? SKSpriteNode {
                 projectile.removeFromParent()
-                monster.removeFromParent()
-                
-                killed += 1
-                labelMonsters.text = "Killed: \(killed)"
-                if killed > 499 {
-                    //player.removeFromParent()
-                    changeScene(won: true)
+                monster.takeHit()
+
+                // Se o monstro foi destruído (removido do parent), conta como morto
+                if monster.parent == nil {
+                    killed += 1
+                    labelMonsters.text = "Killed: \(killed)"
+                    if killed > 499 {
+                        changeScene(won: true)
+                    }
                 }
             }
+
         }
         else if firstBody.categoryBitMask == Categoria.monster &&
-                    secondBody.categoryBitMask == Categoria.player {
-            if let monster = firstBody.node as? SKSpriteNode{
+                secondBody.categoryBitMask == Categoria.player {
+            if let monster = firstBody.node as? Monster {
                 monster.removeFromParent()
-                
-                lives -= 1
+
+                // Se for um LargeMonster, mata logo
+                if monster is LargeMonster {
+                    lives = 0
+                } else {
+                    lives -= 1
+                }
+
                 labelPlayer.text = "Lives: \(lives)"
-                
                 if lives <= 0 {
-                    //player.removeFromParent()
                     changeScene(won: false)
                 }
             }
         }
+
         
         if (firstBody.categoryBitMask == Categoria.player && secondBody.categoryBitMask == Categoria.powerUp) ||
             (firstBody.categoryBitMask == Categoria.powerUp && secondBody.categoryBitMask == Categoria.player) {
@@ -323,24 +355,33 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     override func update(_ currentTime: TimeInterval) {
-        // Verifica todos os monstros na cena
+        // Calcula o deltaTime (tempo entre frames)
+        var deltaTime = currentTime - lastUpdateTime
+        lastUpdateTime = currentTime
+        if deltaTime > 1 { deltaTime = 1.0 / 60.0 } // Evita saltos muito grandes (ex: ao iniciar)
+
         for node in self.children {
-            if let monster = node as? SKSpriteNode,
-               monster.physicsBody?.categoryBitMask == Categoria.monster {
-                
-                // Se o monstro chegou ao lado esquerdo da tela (x <= 0)
+            if let monster = node as? Monster {
+                monster.update(deltaTime: deltaTime)
                 if monster.position.x <= 0 {
-                    monster.removeFromParent()  // Remove o monstro da cena
-                    
-                    lives -= 1
+                    monster.removeFromParent()
+
+                    // Se for um LargeMonster, mata logo
+                    if monster is LargeMonster {
+                        lives = 0
+                    } else {
+                        lives -= 1
+                    }
+
                     labelPlayer.text = "Lives: \(lives)"
-                    
                     if lives <= 0 {
                         changeScene(won: false)
                     }
                 }
+
             }
         }
+        
     }
     
     func slowDownMonsters() {

@@ -9,8 +9,9 @@ import Foundation
 import SpriteKit
 
 class Monster: SKSpriteNode {
-    var originalSpeed : TimeInterval = 1.0
-    
+    var speedPerSecond: CGFloat = 100
+    private var lastUpdateTime: TimeInterval = 0
+    var hp: Int = 1
     init(sceneSize: CGSize, killed: Int) {
         let texture = SKTexture(imageNamed: "monster")
         let size = CGSize(width: 50, height: 50)
@@ -21,29 +22,7 @@ class Monster: SKSpriteNode {
         self.position = CGPoint(x: sceneSize.width - 80, y: randomY)
         
         setupPhysics()
-        
-        // Determinar a duração com base em 'killed'
-        var i: CGFloat = 10
-        var j: CGFloat = 10
-        switch killed {
-        case 0 ..< 3:
-            i = 10
-            j = 10
-        case 3 ..< 6:
-            i = 8
-        case 6 ..< 9:
-            i = 6
-        case 9 ..< 12:
-            i = 4
-            j = 7
-        default:
-            i = 2
-        }
-
-        let duration = CGFloat.random(in: i ... j)
-        originalSpeed = TimeInterval(duration)
-        let move = SKAction.move(to: CGPoint(x: -self.size.width, y: self.position.y), duration: TimeInterval(duration))
-        self.run(SKAction.sequence([move, SKAction.removeFromParent()]))
+        configureSpeed(killed: killed)
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -58,47 +37,77 @@ class Monster: SKSpriteNode {
         self.physicsBody?.collisionBitMask = Categoria.none
         self.physicsBody?.usesPreciseCollisionDetection = true
     }
-    
-    func slowDown() {
-            self.removeAction(forKey: "move")
-            
-            // Nova velocidade: 2x mais lento (podes ajustar como quiseres)
-        let slowedDuration = originalSpeed * 2
 
-            let move = SKAction.move(to: CGPoint(x: -self.size.width, y: self.position.y), duration: slowedDuration)
-            self.run(SKAction.sequence([move, SKAction.removeFromParent()]), withKey: "move")
-        }
-}
-
-class FastMonster : Monster {
-    override init(sceneSize: CGSize, killed: Int) {
-            super.init(sceneSize: sceneSize, killed: killed)
-            self.texture = SKTexture(imageNamed: "fastMonster")
-            self.size = CGSize(width: 40, height: 40)
-        
-        var i: CGFloat = 10
-        var j: CGFloat = 10
+    func configureSpeed(killed: Int) {
         switch killed {
         case 0 ..< 3:
-            i = 8
-            j = 8
+            speedPerSecond = 100
         case 3 ..< 6:
-            i = 5
+            speedPerSecond = 120
         case 6 ..< 9:
-            i = 4
+            speedPerSecond = 150
         case 9 ..< 12:
-            i = 2
-            j = 5
+            speedPerSecond = 180
         default:
-            i = 1
+            speedPerSecond = 220
         }
+        
+    }
 
-        let duration = CGFloat.random(in: i ... j)
-        let move = SKAction.move(to: CGPoint(x: -self.size.width, y: self.position.y), duration: TimeInterval(duration))
-        self.run(SKAction.sequence([move, SKAction.removeFromParent()]))
-        }
+    func update(deltaTime: TimeInterval) {
+        let distance = speedPerSecond * CGFloat(deltaTime)
+        self.position.x -= distance
+    }
 
-        required init?(coder aDecoder: NSCoder) {
-            super.init(coder: aDecoder)
+    func slowDown() {
+        speedPerSecond *= 0.5
+    }
+    
+    func takeHit() {
+        hp -= 1
+
+        if hp <= 0 {
+            self.removeFromParent()
         }
+    }
+
+}
+
+class FastMonster: Monster {
+    override init(sceneSize: CGSize, killed: Int) {
+        super.init(sceneSize: sceneSize, killed: killed)
+        self.texture = SKTexture(imageNamed: "fastMonster")
+        self.size = CGSize(width: 40, height: 40)
+
+        switch killed {
+        case 0 ..< 3:
+            speedPerSecond = 150
+        case 3 ..< 6:
+            speedPerSecond = 180
+        case 6 ..< 9:
+            speedPerSecond = 200
+        case 9 ..< 12:
+            speedPerSecond = 230
+        default:
+            speedPerSecond = 270
+        }
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+}
+class LargeMonster: Monster {
+    override init(sceneSize: CGSize, killed: Int) {
+        super.init(sceneSize: sceneSize, killed: killed)
+        self.texture = SKTexture(imageNamed: "largeMonster") // Certifica-te de que esta imagem existe
+        self.size = CGSize(width: 80, height: 80)
+        self.hp = 3
+
+        speedPerSecond = 70
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
 }
