@@ -19,6 +19,17 @@
 		68B30A592DCDFA4900F6CC2A /* CGPointExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68B30A582DCDFA4900F6CC2A /* CGPointExtensions.swift */; };
 		68BA19E12DDF1B46001F472B /* PowerUp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68BA19E02DDF1B46001F472B /* PowerUp.swift */; };
 		68C180962DD736B200C8A1EF /* Monster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 68C180952DD736B200C8A1EF /* Monster.swift */; };
+		BCB14D132DE8595C009E0DEA /* bigshow.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCB14D0A2DE8595C009E0DEA /* bigshow.mp3 */; };
+		BCB14D142DE8595C009E0DEA /* backgroundmusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCB14D0B2DE8595C009E0DEA /* backgroundmusic.mp3 */; };
+		BCB14D152DE8595C009E0DEA /* defeat.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCB14D0C2DE8595C009E0DEA /* defeat.mp3 */; };
+		BCB14D162DE8595C009E0DEA /* morte.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCB14D0D2DE8595C009E0DEA /* morte.mp3 */; };
+		BCB14D172DE8595C009E0DEA /* menubackgroundmusic.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCB14D0E2DE8595C009E0DEA /* menubackgroundmusic.mp3 */; };
+		BCB14D182DE8595C009E0DEA /* move.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCB14D0F2DE8595C009E0DEA /* move.mp3 */; };
+		BCB14D192DE8595C009E0DEA /* shoot.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCB14D102DE8595C009E0DEA /* shoot.mp3 */; };
+		BCB14D1A2DE8595C009E0DEA /* dano.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCB14D112DE8595C009E0DEA /* dano.mp3 */; };
+		BCB14D1B2DE8595C009E0DEA /* iniciodojogo.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCB14D122DE8595C009E0DEA /* iniciodojogo.mp3 */; };
+		BCB14D1D2DE85B31009E0DEA /* MenuScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = BCB14D1C2DE85B31009E0DEA /* MenuScene.swift */; };
+		BCB14D1F2DE861FC009E0DEA /* upgrade.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = BCB14D1E2DE861FC009E0DEA /* upgrade.mp3 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -35,6 +46,17 @@
 		68B30A582DCDFA4900F6CC2A /* CGPointExtensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGPointExtensions.swift; sourceTree = "<group>"; };
 		68BA19E02DDF1B46001F472B /* PowerUp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PowerUp.swift; sourceTree = "<group>"; };
 		68C180952DD736B200C8A1EF /* Monster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Monster.swift; sourceTree = "<group>"; };
+		BCB14D0A2DE8595C009E0DEA /* bigshow.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = bigshow.mp3; sourceTree = "<group>"; };
+		BCB14D0B2DE8595C009E0DEA /* backgroundmusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = backgroundmusic.mp3; sourceTree = "<group>"; };
+		BCB14D0C2DE8595C009E0DEA /* defeat.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = defeat.mp3; sourceTree = "<group>"; };
+		BCB14D0D2DE8595C009E0DEA /* morte.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = morte.mp3; sourceTree = "<group>"; };
+		BCB14D0E2DE8595C009E0DEA /* menubackgroundmusic.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = menubackgroundmusic.mp3; sourceTree = "<group>"; };
+		BCB14D0F2DE8595C009E0DEA /* move.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = move.mp3; sourceTree = "<group>"; };
+		BCB14D102DE8595C009E0DEA /* shoot.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shoot.mp3; sourceTree = "<group>"; };
+		BCB14D112DE8595C009E0DEA /* dano.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = dano.mp3; sourceTree = "<group>"; };
+		BCB14D122DE8595C009E0DEA /* iniciodojogo.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = iniciodojogo.mp3; sourceTree = "<group>"; };
+		BCB14D1C2DE85B31009E0DEA /* MenuScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuScene.swift; sourceTree = "<group>"; };
+		BCB14D1E2DE861FC009E0DEA /* upgrade.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = upgrade.mp3; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +101,17 @@
 				68B30A582DCDFA4900F6CC2A /* CGPointExtensions.swift */,
 				68C180952DD736B200C8A1EF /* Monster.swift */,
 				68BA19E02DDF1B46001F472B /* PowerUp.swift */,
+				BCB14D0B2DE8595C009E0DEA /* backgroundmusic.mp3 */,
+				BCB14D0A2DE8595C009E0DEA /* bigshow.mp3 */,
+				BCB14D1E2DE861FC009E0DEA /* upgrade.mp3 */,
+				BCB14D112DE8595C009E0DEA /* dano.mp3 */,
+				BCB14D0C2DE8595C009E0DEA /* defeat.mp3 */,
+				BCB14D122DE8595C009E0DEA /* iniciodojogo.mp3 */,
+				BCB14D0E2DE8595C009E0DEA /* menubackgroundmusic.mp3 */,
+				BCB14D0D2DE8595C009E0DEA /* morte.mp3 */,
+				BCB14D0F2DE8595C009E0DEA /* move.mp3 */,
+				BCB14D102DE8595C009E0DEA /* shoot.mp3 */,
+				BCB14D1C2DE85B31009E0DEA /* MenuScene.swift */,
 			);
 			path = "Flappy Invaders";
 			sourceTree = "<group>";
@@ -141,10 +174,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BCB14D132DE8595C009E0DEA /* bigshow.mp3 in Resources */,
+				BCB14D152DE8595C009E0DEA /* defeat.mp3 in Resources */,
+				BCB14D1A2DE8595C009E0DEA /* dano.mp3 in Resources */,
+				BCB14D162DE8595C009E0DEA /* morte.mp3 in Resources */,
+				BCB14D182DE8595C009E0DEA /* move.mp3 in Resources */,
+				BCB14D1B2DE8595C009E0DEA /* iniciodojogo.mp3 in Resources */,
+				BCB14D192DE8595C009E0DEA /* shoot.mp3 in Resources */,
+				BCB14D1F2DE861FC009E0DEA /* upgrade.mp3 in Resources */,
 				68B30A3D2DCDF69C00F6CC2A /* Main.storyboard in Resources */,
 				68B30A342DCDF69C00F6CC2A /* GameScene.sks in Resources */,
+				BCB14D172DE8595C009E0DEA /* menubackgroundmusic.mp3 in Resources */,
 				68B30A3F2DCDF69D00F6CC2A /* Assets.xcassets in Resources */,
 				68B30A422DCDF69D00F6CC2A /* LaunchScreen.storyboard in Resources */,
+				BCB14D142DE8595C009E0DEA /* backgroundmusic.mp3 in Resources */,
 				68B30A362DCDF69C00F6CC2A /* Actions.sks in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -161,6 +204,7 @@
 				68B30A532DCDF97600F6CC2A /* GameScene.swift in Sources */,
 				68B30A592DCDFA4900F6CC2A /* CGPointExtensions.swift in Sources */,
 				68B30A552DCDF9A600F6CC2A /* GameOverScene.swift in Sources */,
+				BCB14D1D2DE85B31009E0DEA /* MenuScene.swift in Sources */,
 				68C180962DD736B200C8A1EF /* Monster.swift in Sources */,
 				68B30A322DCDF69C00F6CC2A /* AppDelegate.swift in Sources */,
 			);

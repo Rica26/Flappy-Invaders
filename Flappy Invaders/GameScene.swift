@@ -37,7 +37,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             background.size = self.size
             background.zPosition = -1
             addChild(background)
-        
+        run(SKAction.playSoundFileNamed("iniciodojogo", waitForCompletion: false))
         
         player.position = CGPoint(x: size.width * 0.05,
                                   y: size.height * 0.5)
@@ -80,7 +80,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         
         
-        let bgMusic = SKAudioNode(fileNamed: "background-music-aac.caf")
+        let bgMusic = SKAudioNode(fileNamed: "backgroundmusic")
         bgMusic.autoplayLooped = true
         addChild(bgMusic)
         
@@ -186,6 +186,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
             if rand < largeChance {
                 monster = LargeMonster(sceneSize: self.size, killed: self.killed)
+                run(SKAction.playSoundFileNamed("bigshow", waitForCompletion: false))
             } else if rand < largeChance + fastChance {
                 monster = FastMonster(sceneSize: self.size, killed: self.killed)
             } else {
@@ -232,13 +233,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 projectile.removeFromParent()
                 monster.takeHit()
 
-                // Se o monstro foi destruído (removido do parent), conta como morto
+                
                 if monster.parent == nil {
                     killed += 1
                     labelMonsters.text = "Killed: \(killed)"
-                    if killed > 499 {
-                        changeScene(won: true)
-                    }
+                    run(SKAction.playSoundFileNamed("morte", waitForCompletion: false))
                 }
             }
 
@@ -247,7 +246,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 secondBody.categoryBitMask == Categoria.player {
             if let monster = firstBody.node as? Monster {
                 monster.removeFromParent()
-
+                run(SKAction.playSoundFileNamed("dano", waitForCompletion: false))
                 // Se for um LargeMonster, mata logo
                 if monster is LargeMonster {
                     lives = 0
@@ -258,6 +257,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 labelPlayer.text = "Lives: \(lives)"
                 if lives <= 0 {
                     changeScene(won: false)
+                    
                 }
             }
         }
@@ -269,10 +269,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             guard let powerUpNode = (firstBody.categoryBitMask == Categoria.powerUp ? firstBody.node : secondBody.node) as? PowerUp else {
                 return
             }
-
+            
+            run(SKAction.playSoundFileNamed("upgrade", waitForCompletion: false))
             // Verifica o tipo de power-up
             if let ammoBox = powerUpNode as? AmmoBox {
                 ammo += 10
+                
                 labelAmmo.text = "Ammo: \(ammo)"
             }
             
@@ -280,9 +282,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 slowDownMonsters()
             }
 
-            // Adiciona aqui outros tipos no futuro, ex: if powerUpNode is HealthPowerUp { ... }
-
-            // Remover o power-up da cena no fim
             powerUpNode.removeFromParent()
         }
     }
@@ -321,38 +320,40 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         player.position = CGPoint(x: player.position.x, y: clampedY)
     }
     
-    func shoot() {
-        
-        let projectile = SKSpriteNode(imageNamed: "projectile")
-        projectile.position = player.position
-        projectile.size = CGSize(width: 50, height: 50)
+        func shoot() {
+            
+            let projectile = SKSpriteNode(imageNamed: "projectile")
+            projectile.position = player.position
+            projectile.size = CGSize(width: 50, height: 50)
 
-        projectile.physicsBody = SKPhysicsBody(circleOfRadius: projectile.size.width / 2)
-        projectile.physicsBody?.isDynamic = true
-        projectile.physicsBody?.categoryBitMask = Categoria.projectile
-        projectile.physicsBody?.contactTestBitMask = Categoria.monster
-        projectile.physicsBody?.collisionBitMask = Categoria.none
-        projectile.physicsBody?.usesPreciseCollisionDetection = true
+            projectile.physicsBody = SKPhysicsBody(circleOfRadius: projectile.size.width / 2)
+            projectile.physicsBody?.isDynamic = true
+            projectile.physicsBody?.categoryBitMask = Categoria.projectile
+            projectile.physicsBody?.contactTestBitMask = Categoria.monster
+            projectile.physicsBody?.collisionBitMask = Categoria.none
+            projectile.physicsBody?.usesPreciseCollisionDetection = true
 
-        addChild(projectile)
+            addChild(projectile)
+            
+            
 
-        
-        let direction = CGVector(dx: cos(player.zRotation), dy: sin(player.zRotation))
+            
+            let direction = CGVector(dx: cos(player.zRotation), dy: sin(player.zRotation))
 
-        
-        let speed: CGFloat = 50
-        let impulse = CGVector(dx: direction.dx * speed, dy: direction.dy * speed)
-        projectile.physicsBody?.applyImpulse(impulse)
+            
+            let speed: CGFloat = 50
+            let impulse = CGVector(dx: direction.dx * speed, dy: direction.dy * speed)
+            projectile.physicsBody?.applyImpulse(impulse)
 
-        
-        let remove = SKAction.sequence([SKAction.wait(forDuration: 2), SKAction.removeFromParent()])
-        projectile.run(remove)
+            
+            let remove = SKAction.sequence([SKAction.wait(forDuration: 2), SKAction.removeFromParent()])
+            projectile.run(remove)
 
-        
-        run(SKAction.playSoundFileNamed("pew-pew-lei.caf", waitForCompletion: false))
-        ammo-=1
-        labelAmmo.text = "Ammo: \(ammo)"
-    }
+            
+            run(SKAction.playSoundFileNamed("shoot", waitForCompletion: false))
+            ammo-=1
+            labelAmmo.text = "Ammo: \(ammo)"
+        }
     
     override func update(_ currentTime: TimeInterval) {
         // Calcula o deltaTime (tempo entre frames)
@@ -365,7 +366,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 monster.update(deltaTime: deltaTime)
                 if monster.position.x <= 0 {
                     monster.removeFromParent()
-
+                    run(SKAction.playSoundFileNamed("dano", waitForCompletion: false))
                     // Se for um LargeMonster, mata logo
                     if monster is LargeMonster {
                         lives = 0
