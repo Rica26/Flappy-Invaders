@@ -1,10 +1,3 @@
-//
-//  PowerUp.swift
-//  Flappy Invaders
-//
-//  Created by Aluno Tmp on 22/05/2025.
-//
-
 import Foundation
 import SpriteKit
 

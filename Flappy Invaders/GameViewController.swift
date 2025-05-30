@@ -1,10 +1,3 @@
-//
-//  GameViewController.swift
-//  Ninjas
-//
-//  Created by Daniela Da Cruz on 11/04/2025.
-//
-
 import UIKit
 import SpriteKit
 import GameplayKit

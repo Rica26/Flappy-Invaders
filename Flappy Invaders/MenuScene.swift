@@ -23,7 +23,7 @@ class MenuScene: SKScene {
         addChild(titleLabel)
         
         // Botão Play
-        let playButton = SKLabelNode(text: "Play")
+        let playButton = SKLabelNode(text: "PLAY")
         playButton.name = "play"
         playButton.fontName = "Arial-BoldMT"
         playButton.fontSize = 30
@@ -32,7 +32,7 @@ class MenuScene: SKScene {
         addChild(playButton)
         
         // Botão Exit
-        let exitButton = SKLabelNode(text: "Exit")
+        let exitButton = SKLabelNode(text: "EXIT")
         exitButton.name = "exit"
         exitButton.fontName = "Arial-BoldMT"
         exitButton.fontSize = 30

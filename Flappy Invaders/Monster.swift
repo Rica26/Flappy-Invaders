@@ -1,10 +1,3 @@
-//
-//  Monster.swift
-//  Flappy Invaders
-//
-//  Created by Aluno Tmp on 16/05/2025.
-//
-
 import Foundation
 import SpriteKit
 
@@ -16,10 +9,12 @@ class Monster: SKSpriteNode {
         let texture = SKTexture(imageNamed: "monster")
         let size = CGSize(width: 50, height: 50)
         
+        
         super.init(texture: texture, color: .clear, size: size)
 
         let randomY = CGFloat.random(in: 0 ..< sceneSize.height)
         self.position = CGPoint(x: sceneSize.width - 80, y: randomY)
+        self.xScale = -1
         
         setupPhysics()
         configureSpeed(killed: killed)
@@ -40,13 +35,13 @@ class Monster: SKSpriteNode {
 
     func configureSpeed(killed: Int) {
         switch killed {
-        case 0 ..< 3:
+        case 0 ..< 15:
             speedPerSecond = 100
-        case 3 ..< 6:
+        case 15 ..< 30:
             speedPerSecond = 120
-        case 6 ..< 9:
+        case 30 ..< 45:
             speedPerSecond = 150
-        case 9 ..< 12:
+        case 45 ..< 60:
             speedPerSecond = 180
         default:
             speedPerSecond = 220
@@ -80,13 +75,13 @@ class FastMonster: Monster {
         self.size = CGSize(width: 40, height: 40)
 
         switch killed {
-        case 0 ..< 3:
+        case 0 ..< 15:
             speedPerSecond = 150
-        case 3 ..< 6:
+        case 15 ..< 30:
             speedPerSecond = 180
-        case 6 ..< 9:
+        case 30 ..< 45:
             speedPerSecond = 200
-        case 9 ..< 12:
+        case 45 ..< 60:
             speedPerSecond = 230
         default:
             speedPerSecond = 270
@@ -104,7 +99,7 @@ class LargeMonster: Monster {
         self.size = CGSize(width: 80, height: 80)
         self.hp = 3
 
-        speedPerSecond = 70
+        speedPerSecond = 85
     }
 
     required init?(coder aDecoder: NSCoder) {

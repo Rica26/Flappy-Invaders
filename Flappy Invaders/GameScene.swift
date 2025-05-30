@@ -1,10 +1,3 @@
-//
-//  GameScene.swift
-//  Ninjas
-//
-//  Created by Daniela Da Cruz on 11/04/2025.
-//
-
 import SpriteKit
 import GameplayKit
 
@@ -23,7 +16,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var killed = 0
     let labelPlayer = SKLabelNode()
     let labelMonsters = SKLabelNode()
-    var ammo = 500
+    var ammo = 50
     let labelAmmo = SKLabelNode()
     var lastUpdateTime: TimeInterval = 0
 
@@ -86,14 +79,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         
         upButton.name = "upButton"
-        upButton.size = CGSize(width: 70, height: 70)
-        upButton.position = CGPoint(x: 90, y: 100)
+        upButton.size = CGSize(width: 90, height: 90)
+        upButton.position = CGPoint(x: 110, y: 110)
         addChild(upButton)
             
         
         downButton.name = "downButton"
-        downButton.size = CGSize(width: 70, height: 70)
-        downButton.position = CGPoint(x: 90, y: 40)
+        downButton.size = CGSize(width: 90, height: 90)
+        downButton.position = CGPoint(x: 110, y: 40)
         downButton.zRotation = .pi
         addChild(downButton)
         
@@ -105,8 +98,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func startMonsterSpawn() {
         let baseInterval: Double = 2.0
-        let spawnRateIncrease: Double = 0.03 // quanto mais kills, mais rápido
-        let minInterval: Double = 0.3        // nunca menos que isso
+        let spawnRateIncrease: Double = 0.05
+        let minInterval: Double = 0.3
 
         let adjustedInterval = max(baseInterval - (Double(killed) * spawnRateIncrease), minInterval)
 
@@ -118,68 +111,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let repeatAction = SKAction.repeatForever(spawnAction)
         run(repeatAction, withKey: "monsterSpawn")
     }
-
-    /*
-    func addMonster() {
-        let monster = SKSpriteNode(imageNamed: "monster")
-        let randomY = CGFloat.random(in: 0 ..< size.height)
-
-        monster.position = CGPoint(x: size.width - 80, y: randomY)
-        monster.size = CGSize(width: 50, height: 50)
-        
-        
-        monster.physicsBody = SKPhysicsBody(rectangleOf: monster.size)
-        monster.physicsBody?.isDynamic = false
-        monster.physicsBody?.categoryBitMask = Categoria.monster
-        monster.physicsBody?.contactTestBitMask = Categoria.projectile | Categoria.player
-        monster.physicsBody?.collisionBitMask = Categoria.none
-        monster.physicsBody?.usesPreciseCollisionDetection = true
-        
-         
-        addChild(monster)
-        
-        var i : CGFloat
-        var j : CGFloat
-        i = 10
-        j = 10
-        
-        switch killed {
-        case 0 ..< 30:
-            i = 10
-            j = 10
-        case 30 ..< 60:
-            i = 8
-        case 60 ..< 90:
-            i = 6
-        case 90 ..< 120:
-            i = 4
-            j = 7
-        default:
-            i = 2
-        }
-        
-        let duration = CGFloat.random(in: i ... j)
-        let move = SKAction.move(to: CGPoint(x: -monster.size.width, y: randomY), duration: duration)
-        monster.run(SKAction.sequence([move, SKAction.removeFromParent()] ))
-    }
-     */
     
     func addMonster() {
         var monster: Monster
             var fastChance: CGFloat
             var largeChance: CGFloat
 
-            // Define as chances de acordo com o número de inimigos mortos
+            
             switch killed {
-            case 0..<5:
-                fastChance = 0   // 0%
-                largeChance = 0 // 0%
-            case 5..<10:
-                fastChance = 20  // 20%
-                largeChance = 5  // 5%
+            case 0..<25:
+                fastChance = 0
+                largeChance = 0
+            case 25..<50:
+                fastChance = 30
+                largeChance = 10
             default:
-                fastChance = 40  // 40%
-                largeChance = 10 // 10%
+                fastChance = 45
+                largeChance = 20
             }
 
             let rand = CGFloat.random(in: 0..<100)
@@ -202,12 +150,12 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
          */
         
-        if Int.random(in: 0...100) < 60 { // 5% de probabilidade
+        if Int.random(in: 0...100) < 20 { // 5% de probabilidade
             let ammoBox = AmmoBox(sceneSize: self.size)
             self.addChild(ammoBox)
         }
         
-        if Int.random(in: 0...100) < 40 {
+        if Int.random(in: 0...100) < 10 {
             let slow = Slow(sceneSize: self.size)
             self.addChild(slow)
         }
@@ -256,7 +204,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
                 labelPlayer.text = "Lives: \(lives)"
                 if lives <= 0 {
-                    changeScene(won: false)
+                    changeScene( killed: killed)
                     
                 }
             }
@@ -286,9 +234,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    func changeScene(won: Bool) {
+    func changeScene( killed: Int) {
         let reveal = SKTransition.flipVertical(withDuration: 0.5)
-        let gameoverScene = GameOverScene(size: self.size, won: won)
+        let gameoverScene = GameOverScene(size: self.size, killed: killed)
         self.view?.presentScene(gameoverScene, transition: reveal)
     }
     
@@ -376,7 +324,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
                     labelPlayer.text = "Lives: \(lives)"
                     if lives <= 0 {
-                        changeScene(won: false)
+                        changeScene(killed: killed)
                     }
                 }
 
