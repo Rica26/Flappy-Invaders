@@ -4,7 +4,7 @@ import SpriteKit
 class PowerUp: SKSpriteNode {
 
     init(sceneSize: CGSize) {
-        let texture = SKTexture(imageNamed: "powerup") // textura por defeito
+        let texture = SKTexture(imageNamed: "powerup")
         let size = CGSize(width: 40, height: 40)
         super.init(texture: texture, color: .clear, size: size)
 

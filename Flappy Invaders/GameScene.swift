@@ -4,9 +4,9 @@ import GameplayKit
 struct Categoria {
     static let none : UInt32 = 0
     static let all : UInt32 = UInt32.max
-    static let monster : UInt32 = 0b1  // 1
-    static let projectile : UInt32 = 0b10 // 2
-    static let player : UInt32 = 0b11 // 3
+    static let monster : UInt32 = 0b1  
+    static let projectile : UInt32 = 0b10
+    static let player : UInt32 = 0b11
     static let powerUp: UInt32 = 0x1 << 3
 }
 
@@ -143,12 +143,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
             addChild(monster)
         
-        /*
-        if Int.random(in: 0...100) < 100 { // 5% de probabilidade
-            let powerUp = PowerUp(sceneSize: self.size)
-            self.addChild(powerUp)
-        }
-         */
         
         if Int.random(in: 0...100) < 20 { // 5% de probabilidade
             let ammoBox = AmmoBox(sceneSize: self.size)
@@ -195,7 +189,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             if let monster = firstBody.node as? Monster {
                 monster.removeFromParent()
                 run(SKAction.playSoundFileNamed("dano", waitForCompletion: false))
-                // Se for um LargeMonster, mata logo
+                
                 if monster is LargeMonster {
                     lives = 0
                 } else {
@@ -219,7 +213,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
             
             run(SKAction.playSoundFileNamed("upgrade", waitForCompletion: false))
-            // Verifica o tipo de power-up
+            
             if let ammoBox = powerUpNode as? AmmoBox {
                 ammo += 10
                 
@@ -304,18 +298,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     
     override func update(_ currentTime: TimeInterval) {
-        // Calcula o deltaTime (tempo entre frames)
+        
         var deltaTime = currentTime - lastUpdateTime
         lastUpdateTime = currentTime
-        if deltaTime > 1 { deltaTime = 1.0 / 60.0 } // Evita saltos muito grandes (ex: ao iniciar)
-
+        if deltaTime > 1 { deltaTime = 1.0 / 60.0 }
         for node in self.children {
             if let monster = node as? Monster {
                 monster.update(deltaTime: deltaTime)
                 if monster.position.x <= 0 {
                     monster.removeFromParent()
                     run(SKAction.playSoundFileNamed("dano", waitForCompletion: false))
-                    // Se for um LargeMonster, mata logo
+
                     if monster is LargeMonster {
                         lives = 0
                     } else {

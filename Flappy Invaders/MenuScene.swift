@@ -3,10 +3,10 @@ import SpriteKit
 class MenuScene: SKScene {
 
     override func didMove(to view: SKView) {
-        // Adiciona o fundo com imagem (certifica-te que a imagem está no Assets.xcassets)
+        
         let background = SKSpriteNode(imageNamed: "background")
         background.position = CGPoint(x: size.width / 2, y: size.height / 2)
-        background.zPosition = -1  // Coloca atrás de tudo
+        background.zPosition = -1
         background.size = self.size
         addChild(background)
         
@@ -14,7 +14,7 @@ class MenuScene: SKScene {
         bgMusic.autoplayLooped = true
         addChild(bgMusic)
         
-        // Título
+        
         let titleLabel = SKLabelNode(text: "Flappy Invaders")
         titleLabel.fontName = "Arial-BoldMT"
         titleLabel.fontSize = 40
@@ -22,7 +22,7 @@ class MenuScene: SKScene {
         titleLabel.position = CGPoint(x: size.width / 2, y: size.height * 0.7)
         addChild(titleLabel)
         
-        // Botão Play
+        
         let playButton = SKLabelNode(text: "PLAY")
         playButton.name = "play"
         playButton.fontName = "Arial-BoldMT"
@@ -31,7 +31,7 @@ class MenuScene: SKScene {
         playButton.position = CGPoint(x: size.width / 2, y: size.height * 0.5)
         addChild(playButton)
         
-        // Botão Exit
+        
         let exitButton = SKLabelNode(text: "EXIT")
         exitButton.name = "exit"
         exitButton.fontName = "Arial-BoldMT"

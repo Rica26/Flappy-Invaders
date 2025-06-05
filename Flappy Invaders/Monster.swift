@@ -95,7 +95,7 @@ class FastMonster: Monster {
 class LargeMonster: Monster {
     override init(sceneSize: CGSize, killed: Int) {
         super.init(sceneSize: sceneSize, killed: killed)
-        self.texture = SKTexture(imageNamed: "largeMonster") // Certifica-te de que esta imagem existe
+        self.texture = SKTexture(imageNamed: "largeMonster")
         self.size = CGSize(width: 80, height: 80)
         self.hp = 3
 
