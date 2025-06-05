@@ -144,7 +144,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             addChild(monster)
         
         
-        if Int.random(in: 0...100) < 20 { // 5% de probabilidade
+        if Int.random(in: 0...100) < 20 {
             let ammoBox = AmmoBox(sceneSize: self.size)
             self.addChild(ammoBox)
         }
